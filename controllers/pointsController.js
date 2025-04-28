@@ -69,7 +69,6 @@ exports.redeemReward = async (req, res, next) => {
     const { userId } = req.params;
     const { rewardId, shippingAddress } = req.body;
 
-    // Verificar se o usuário existe
     const user = await User.findById(userId);
     
     if (!user) {
@@ -126,7 +125,7 @@ exports.redeemReward = async (req, res, next) => {
     });
 
     await activity.save();
-
+s
     user.points -= reward.pointsCost;
     await user.save();
 

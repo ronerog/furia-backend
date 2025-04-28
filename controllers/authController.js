@@ -114,48 +114,6 @@ exports.login = async (req, res, next) => {
   }
 };
 
-exports.googleLogin = async (req, res, next) => {
-  try {
-    const { tokenId } = req.body;
-
-  
-    const googleId = 'google-id-123'; 
-    const email = 'usuario@gmail.com'; 
-    const name = 'Usuário Google';
-
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      const username = name.replace(/\s+/g, '') + Math.floor(Math.random() * 1000);
-
-      user = new User({
-        username,
-        email,
-        fullName: name,
-        googleId,
-        password: Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
-      });
-
-      await user.save();
-    }
-
-    const token = user.getSignedJwtToken();
-
-    res.json({
-      success: true,
-      token,
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        points: user.points
-      }
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
 exports.getMe = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);

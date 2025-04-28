@@ -23,8 +23,6 @@ router.post(
   login
 );
 
-router.post('/google', googleLogin);
-
 router.get('/me', protect, getMe);
 
 module.exports = router;

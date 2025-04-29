@@ -76,6 +76,50 @@ const UserSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  social: {
+    twitter: {
+      id: String,
+      username: String,
+      token: String,
+      tokenSecret: String,
+      profileUrl: String
+    },
+    instagram: {
+      id: String,
+      username: String,
+      token: String,
+      refreshToken: String,
+      profileUrl: String
+    },
+    facebook: {
+      id: String,
+      name: String,
+      token: String,
+      profileUrl: String
+    },
+    google: {
+      id: String,
+      name: String,
+      email: String,
+      token: String,
+      refreshToken: String
+    },
+    twitch: {
+      id: String,
+      username: String,
+      displayName: String,
+      token: String,
+      refreshToken: String,
+      profileUrl: String
+    },
+    discord: {
+      id: String,
+      username: String,
+      discriminator: String,
+      token: String,
+      avatar: String
+    }
   }
 });
 

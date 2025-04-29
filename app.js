@@ -8,6 +8,12 @@ const path = require('path');
 const errorHandler = require('./middlewares/errorHandler');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpecs = require('./config/swagger');
+const http = require('http');
+const bodyParser = require('body-parser');
+const socketService = require('./services/socket');
+const rabbitmqService = require('./services/rabbitmq');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'seu_segredo_jwt'; 
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -74,5 +80,32 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use(errorHandler);
+
+const server = http.createServer(app);
+
+async function startServer() {
+  try {
+    await rabbitmqService.connect();
+    
+    await socketService.initialize(server, JWT_SECRET);
+    
+    const PORT = process.env.PORT || 5000;
+    server.listen(PORT, () => {
+      console.log(`Servidor rodando na porta ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Erro ao iniciar servidor:', error);
+    process.exit(1);
+  }
+}
+
+startServer();
+
+// Tratamento de erro para encerramento limpo
+process.on('SIGTERM', async () => {
+  console.info('SIGTERM recebido');
+  await rabbitmqService.close();
+  process.exit(0);
+});
 
 module.exports = app;

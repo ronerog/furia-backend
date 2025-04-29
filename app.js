@@ -101,7 +101,6 @@ async function startServer() {
 
 startServer();
 
-// Tratamento de erro para encerramento limpo
 process.on('SIGTERM', async () => {
   console.info('SIGTERM recebido');
   await rabbitmqService.close();

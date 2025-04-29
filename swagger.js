@@ -1,4 +1,3 @@
-// config/swagger.js
 const swaggerJsdoc = require('swagger-jsdoc');
 
 const options = {
@@ -34,7 +33,7 @@ const options = {
       bearerAuth: [],
     }],
   },
-  apis: ['./routes/*.js'], // Caminho para os arquivos com anotações
+  apis: ['./routes/*.js'],
 };
 
 const specs = swaggerJsdoc(options);

@@ -10,7 +10,6 @@ FURIA Backend é uma API RESTful e servidor de WebSocket que fornece dados e fun
 - **Socket.IO**: Comunicação em tempo real
 - **JSON Web Token (JWT)**: Autenticação de usuários
 - **Passport**: Middleware de autenticação
-- **RabbitMQ**: Sistema de mensageria
 - **Multer**: Upload de arquivos
 - **Swagger**: Documentação da API
 - **Helmet**: Segurança para cabeçalhos HTTP
@@ -22,7 +21,7 @@ FURIA Backend é uma API RESTful e servidor de WebSocket que fornece dados e fun
 - `middlewares/`: Middleware para autenticação, upload e tratamento de erros
 - `models/`: Modelos Mongoose para o banco de dados
 - `routes/`: Rotas da API
-- `services/`: Serviços para Socket.IO e RabbitMQ
+- `services/`: Serviços para Socket.IO
 - `config/`: Configurações da aplicação
 - `seeds/`: Dados iniciais para o banco de dados
 
@@ -46,14 +45,12 @@ FURIA Backend é uma API RESTful e servidor de WebSocket que fornece dados e fun
 - **Upload de Arquivos**: Suporte para imagens de perfil e produtos
 - **Documentação Swagger**: API documentada e testável
 - **Integração com Redes Sociais**: Login via OAuth
-- **Mensageria com RabbitMQ**: Processamento assíncrono de mensagens
 
 ## Como Rodar o Projeto
 
 ### Pré-requisitos
 - Node.js (versão 18 ou superior)
 - MongoDB (local ou remoto)
-- RabbitMQ (opcional, para mensageria avançada)
 
 ### Passo a Passo
 
@@ -76,7 +73,6 @@ MONGODB_URI=mongodb://localhost:27017/furia_db
 JWT_SECRET=sua_chave_secreta_aqui
 JWT_EXPIRE=7d
 FRONTEND_URL=http://localhost:5173
-RABBITMQ_URL=amqp://localhost
 ```
 
 #### Popule o banco de dados (opcional)

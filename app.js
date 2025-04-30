@@ -10,7 +10,6 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerSpecs = require('./swagger');
 const http = require('http');
 const socketController = require('./controllers/socketController');
-const rabbitmqService = require('./services/rabbitmq');
 const connectDB = require('./config/database');
 
 const dotenv = require('dotenv');
@@ -73,7 +72,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
-
 app.use(errorHandler);
 
 const server = http.createServer(app);
@@ -82,14 +80,6 @@ async function startServer() {
   try {
     await connectDB();
     
-    try {
-      await rabbitmqService.connect();
-      console.log('RabbitMQ conectado com sucesso');
-    } catch (rabbitError) {
-      console.warn('Aviso: RabbitMQ não está disponível. Funcionalidades relacionadas a mensageria estarão desativadas.');
-      console.warn('Detalhes:', rabbitError.message);
-    }
-
     const io = require('socket.io')(server, {
       cors: {
         origin: process.env.FRONTEND_URL || '*',
@@ -114,7 +104,6 @@ startServer();
 
 process.on('SIGTERM', async () => {
   console.info('SIGTERM recebido');
-  await rabbitmqService.close();
   process.exit(0);
 });
 

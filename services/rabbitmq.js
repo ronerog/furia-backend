@@ -1,5 +1,5 @@
 const amqp = require('amqplib');
-const config = require('../config/rabbitmq');
+const config = require('../config/rabbitmq.config');
 
 let connection = null;
 let channel = null;

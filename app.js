@@ -7,13 +7,11 @@ const passport = require('passport');
 const path = require('path');
 const errorHandler = require('./middlewares/errorHandler');
 const swaggerUi = require('swagger-ui-express');
-const swaggerSpecs = require('./config/swagger');
+const swaggerSpecs = require('./swagger');
 const http = require('http');
-const bodyParser = require('body-parser');
-const socketService = require('./services/socket');
+const socketController = require('./controllers/socketController');
 const rabbitmqService = require('./services/rabbitmq');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'seu_segredo_jwt'; 
+const connectDB = require('./config/database');
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -24,9 +22,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 if (process.env.NODE_ENV === 'production') {
   app.use(helmet());
-  
   app.use(compression());
-  
   
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, 
@@ -70,7 +66,6 @@ app.get('/', (req, res) => {
   res.send('API da FURIA está rodando');
 });
 
-
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/build')));
   
@@ -85,9 +80,25 @@ const server = http.createServer(app);
 
 async function startServer() {
   try {
-    await rabbitmqService.connect();
+    await connectDB();
     
-    await socketService.initialize(server, JWT_SECRET);
+    try {
+      await rabbitmqService.connect();
+      console.log('RabbitMQ conectado com sucesso');
+    } catch (rabbitError) {
+      console.warn('Aviso: RabbitMQ não está disponível. Funcionalidades relacionadas a mensageria estarão desativadas.');
+      console.warn('Detalhes:', rabbitError.message);
+    }
+
+    const io = require('socket.io')(server, {
+      cors: {
+        origin: process.env.FRONTEND_URL || '*',
+        methods: ['GET', 'POST'],
+        credentials: true
+      }
+    });
+    
+    socketController(io);
     
     const PORT = process.env.PORT || 5000;
     server.listen(PORT, () => {

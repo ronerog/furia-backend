@@ -22,10 +22,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 if (process.env.NODE_ENV === 'production') {
   app.use(helmet());
   app.use(compression());
-  
+
   const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, 
-    max: 100, 
+    windowMs: 15 * 60 * 1000,
+    max: 100,
     standardHeaders: true,
     legacyHeaders: false,
     message: {
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'production') {
       message: 'Muitas requisições, tente novamente mais tarde'
     }
   });
-  
+
   app.use(limiter);
 }
 
@@ -65,13 +65,6 @@ app.get('/', (req, res) => {
   res.send('API da FURIA está rodando');
 });
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'client/build')));
-  
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  });
-}
 app.use(errorHandler);
 
 const server = http.createServer(app);
@@ -79,7 +72,7 @@ const server = http.createServer(app);
 async function startServer() {
   try {
     await connectDB();
-    
+
     const io = require('socket.io')(server, {
       cors: {
         origin: process.env.FRONTEND_URL || '*',
@@ -87,9 +80,9 @@ async function startServer() {
         credentials: true
       }
     });
-    
+
     socketController(io);
-    
+
     const PORT = process.env.PORT || 5000;
     server.listen(PORT, () => {
       console.log(`Servidor rodando na porta ${PORT}`);

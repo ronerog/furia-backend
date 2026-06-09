@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -11,9 +14,6 @@ const swaggerSpecs = require('./swagger');
 const http = require('http');
 const socketController = require('./controllers/socketController');
 const connectDB = require('./config/database');
-
-const dotenv = require('dotenv');
-dotenv.config();
 
 const app = express();
 

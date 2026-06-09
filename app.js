@@ -1,6 +1,12 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
+console.log('ENV VARS:', {
+  MONGODB_URI: process.env.MONGODB_URI,
+  PORT: process.env.PORT,
+  NODE_ENV: process.env.NODE_ENV
+});
+
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');

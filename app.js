@@ -22,6 +22,7 @@ const socketController = require('./controllers/socketController');
 const connectDB = require('./config/database');
 
 const app = express();
+app.set('trust proxy', 1);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
